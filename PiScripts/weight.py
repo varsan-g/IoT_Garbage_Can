@@ -5,8 +5,8 @@ from websocket import create_connection
 # Set up the correct pin numbers here
 DT_PIN = 5 
 SCK_PIN = 6
-R_DIODE_PIN = 0 # Red diode pin
-G_DIODE_PIN = 0 # Green diode pin
+R_DIODE_PIN = 12 # Red diode pin
+G_DIODE_PIN = 18 # Green diode pin
 SWITCH_PIN = 0 # Button(Switch) pin
 
 def my_callback(channel):
@@ -35,8 +35,13 @@ try:
     while True:
        calculated_weight = hx.get_weight_mean(20)
        print(calculated_weight) # print the value in gram
-       ws.send(calculated_weight)
-
+       ws.send(str(calculated_weight))
+       if calculated_weight > 1000:
+            GPIO.output(R_DIODE_PIN, GPIO.HIGH)
+            GPIO.output(G_DIODE_PIN, GPIO.LOW)
+       else:
+            GPIO.output(R_DIODE_PIN, GPIO.LOW)
+            GPIO.output(G_DIODE_PIN, GPIO.HIGH) 
 finally:
     GPIO.cleanup()
     #ws.close()
