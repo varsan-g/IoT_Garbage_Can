@@ -18,7 +18,6 @@ def reset():
 try:
     reset()
     GPIO.setmode(GPIO.BCM)
-    hx = HX711(dout_pin=DT_PIN, pd_sck_pin=SCK_PIN)
     GPIO.setup(R_DIODE_PIN, GPIO.OUT)
     GPIO.setup(G_DIODE_PIN, GPIO.OUT)
     GPIO.setup(SWITCH_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -28,6 +27,7 @@ finally:
     GPIO.cleanup()
 
 try:
+    hx = HX711(dout_pin=DT_PIN, pd_sck_pin=SCK_PIN)
     print("Please don't place anything on the weight...")
     hx.zero() #reset the hx711
     initial_reading = hx.get_raw_data_mean() #get value without weight
