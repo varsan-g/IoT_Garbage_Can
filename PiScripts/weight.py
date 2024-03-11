@@ -14,6 +14,7 @@ def my_callback(channel):
 def reset():
     GPIO.cleanup()
 
+# Setting up pins
 try:
     reset()
     GPIO.setmode(GPIO.BCM)
