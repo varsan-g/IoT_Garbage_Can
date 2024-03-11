@@ -16,7 +16,7 @@ const data = {
     job: 'Software Developer'
 };
 
-let path:string ="C:\\temp\\data\\demo.txt";
+let path:string ="./dump/demo.txt";
 
 const fd:FileDump  = new FileDump();
 
