@@ -14,19 +14,12 @@ def my_callback(channel):
 def reset():
     GPIO.cleanup()
 
-# Setting up pins
 try:
-    reset()
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(R_DIODE_PIN, GPIO.OUT)
     GPIO.setup(G_DIODE_PIN, GPIO.OUT)
     GPIO.setup(SWITCH_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(SWITCH_PIN, GPIO.FALLING, callback=my_callback) 
-
-finally:
-    GPIO.cleanup()
-
-try:
     hx = HX711(dout_pin=DT_PIN, pd_sck_pin=SCK_PIN)
     print("Please don't place anything on the weight...")
     hx.zero() #reset the hx711
