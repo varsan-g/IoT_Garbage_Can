@@ -8,7 +8,6 @@ SCK_PIN = 6
 R_DIODE_PIN = 0 # Red diode pin
 G_DIODE_PIN = 0 # Green diode pin
 SWITCH_PIN = 0 # Button(Switch) pin
-ws = None
 
 def my_callback(channel):
    print("You pressed the button")
@@ -16,11 +15,7 @@ def my_callback(channel):
 def reset():
     GPIO.cleanup()
 
-def create_connection():
-    global ws
-    LOCAL_IP = input("Enter the IP of the machine you're connecting to: ")
-    ws = create_connection("ws://${LOCAL_IP}:8080")
-    return ws
+
 
 try:
     GPIO.setmode(GPIO.BCM)
@@ -32,7 +27,8 @@ try:
     print("Please don't place anything on the weight...")
     hx.zero() #reset the hx711
     initial_reading = hx.get_raw_data_mean() #get value without weight
-    create_connection()
+    ws = create_connection ("ws://10.176.69.101:8080")
+    ws.send("connected")
     input("Put a known weight on the weight and press enter: ")
     cali_reading =hx.get_data_mean()
     known_weight = input("How much weight did you put on in gr: ")
@@ -43,4 +39,4 @@ try:
 
 finally:
     GPIO.cleanup()
-    ws.close()
+    #ws.close()
