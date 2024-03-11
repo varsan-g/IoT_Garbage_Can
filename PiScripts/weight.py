@@ -1,12 +1,14 @@
 import RPi.GPIO as GPIO
 from hx711 import HX711
+from websocket import create_connection
 
-# Setup the correct pin numbers here
+# Set up the correct pin numbers here
 DT_PIN = 5 
 SCK_PIN = 6
 R_DIODE_PIN = 0 # Red diode pin
 G_DIODE_PIN = 0 # Green diode pin
 SWITCH_PIN = 0 # Button(Switch) pin
+LOCAL_IP = "0.0.0.0"
 
 def my_callback(channel):
    print("You pressed the button")
@@ -24,6 +26,8 @@ try:
     print("Please don't place anything on the weight...")
     hx.zero() #reset the hx711
     initial_reading = hx.get_raw_data_mean() #get value without weight
+    LOCAL_IP = input("Enter the IP of the machine you're connecting to: ")
+    ws = create_connection("ws://${LOCAL_IP}:8080")
     input("Put a known weight on the weight and press enter: ")
     cali_reading =hx.get_data_mean()
     known_weight = input("How much weight did you put on in gr: ")
@@ -34,3 +38,4 @@ try:
 
 finally:
     GPIO.cleanup()
+    ws.close()
