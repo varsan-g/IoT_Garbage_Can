@@ -15,8 +15,6 @@ def my_callback(channel):
 def reset():
     GPIO.cleanup()
 
-
-
 try:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(R_DIODE_PIN, GPIO.OUT)
@@ -35,7 +33,9 @@ try:
     hx.set_scale_ratio(cali_reading/float(known_weight)) #set the ratio to the value change for each gram
     input ("calibration done, press Enter to read weight values: ")
     while True:
-       print(hx.get_weight_mean(20), "g") # print the value in gram
+       calculated_weight = hx.get_weight_mean(20)
+       print(calculated_weight) # print the value in gram
+       ws.send(calculated_weight)
 
 finally:
     GPIO.cleanup()
