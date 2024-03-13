@@ -9,6 +9,9 @@ R_DIODE_PIN = 12 # Red diode pin
 G_DIODE_PIN = 18 # Green diode pin
 SWITCH_PIN = 0 # Button(Switch) pin
 
+weight_before_reset = 0
+weight_reset_threshold = 500
+
 def my_callback(channel):
    print("You pressed the button")
 
@@ -34,14 +37,24 @@ try:
     input ("calibration done, press Enter to read weight values: ")
     while True:
        calculated_weight = hx.get_weight_mean(20)
-       print(calculated_weight) # print the value in gram
-       ws.send(str(calculated_weight))
-       if calculated_weight > 1000:
-            GPIO.output(R_DIODE_PIN, GPIO.HIGH)
-            GPIO.output(G_DIODE_PIN, GPIO.LOW)
-       else:
-            GPIO.output(R_DIODE_PIN, GPIO.LOW)
-            GPIO.output(G_DIODE_PIN, GPIO.HIGH) 
+       while calculated_weight >= weight_reset_threshold:
+           if calculated_weight < 50:
+              GPIO.output(R_DIODE_PIN, GPIO.HIGH)
+              GPIO.output(G_DIODE_PIN, GPIO.LOW)
+              print(calculated_weight)
+              ws.send(str(calculated_weight))
+              break
+           else:
+               break
+           
+    #    if calculated_weight > 1000:
+    #         GPIO.output(R_DIODE_PIN, GPIO.HIGH)
+    #         GPIO.output(G_DIODE_PIN, GPIO.LOW)
+    #         print(calculated_weight)
+    #         ws.send(str(calculated_weight))
+    #    else:
+    #         GPIO.output(R_DIODE_PIN, GPIO.LOW)
+    #         GPIO.output(G_DIODE_PIN, GPIO.HIGH) 
 finally:
     GPIO.cleanup()
     #ws.close()
