@@ -35,6 +35,7 @@ try:
     input ("calibration done, press Enter to read weight values: ")
     while True:
        calculated_weight = hx.get_weight_mean(20)
+       print (calculated_weight)
        while calculated_weight >= weight_reset_threshold:
           if calculated_weight >= weight_reset_threshold:
             last_weight_above_threshold = calculated_weight
