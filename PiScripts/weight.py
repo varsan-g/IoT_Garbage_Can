@@ -11,9 +11,7 @@ SWITCH_PIN = 0 # Button(Switch) pin
 
 weight_before_reset = 0
 weight_reset_threshold = 500
-
-def my_callback(channel):
-   print("You pressed the button")
+last_weight = None
 
 def reset():
     GPIO.cleanup()
@@ -38,23 +36,15 @@ try:
     while True:
        calculated_weight = hx.get_weight_mean(20)
        while calculated_weight >= weight_reset_threshold:
-           if calculated_weight < 50:
-              GPIO.output(R_DIODE_PIN, GPIO.HIGH)
-              GPIO.output(G_DIODE_PIN, GPIO.LOW)
-              print(calculated_weight)
-              ws.send(str(calculated_weight))
-              break
-           else:
-               break
-           
-    #    if calculated_weight > 1000:
-    #         GPIO.output(R_DIODE_PIN, GPIO.HIGH)
-    #         GPIO.output(G_DIODE_PIN, GPIO.LOW)
-    #         print(calculated_weight)
-    #         ws.send(str(calculated_weight))
-    #    else:
-    #         GPIO.output(R_DIODE_PIN, GPIO.LOW)
-    #         GPIO.output(G_DIODE_PIN, GPIO.HIGH) 
+          if calculated_weight >= weight_reset_threshold:
+            last_weight_above_threshold = calculated_weight
+          elif last_weight is not None and calculated_weight < 50:
+            # Weight has been emptied, send the last weight above 500
+            GPIO.output(R_DIODE_PIN, GPIO.HIGH)
+            GPIO.output(G_DIODE_PIN, GPIO.LOW)
+            print("Last weight before emptying:", last_weight_above_threshold)
+            ws.send(str(last_weight_above_threshold))
+            last_weight_above_threshold = None  # Reset the last weight above threshold
 finally:
     GPIO.cleanup()
     #ws.close()
