@@ -1,10 +1,9 @@
 {
-  "name": "compiler-setup-on-template",
+  "name": "usproject",
   "version": "1.0.0",
-  "description": "",
   "main": "dist/launch.js",
-  "type": "module",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && copy package.json dist\\package.json",
     "start": "ts-node ."
   },

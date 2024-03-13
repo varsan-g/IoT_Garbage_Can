@@ -8,11 +8,7 @@ routes.use(cors());
 routes.use(express.static('public'));
 routes.use(bodyParser.urlencoded({ extended: false }));
 routes.use(bodyParser.json());
-import { LoginEndpoint } from '../1_endpoints/LoginEndpoint.js';
 // DB.connect(); // SENERE
-routes.post('/api/logon', (req, res) => {
-    return LoginEndpoint.evaluate(req, res);
-});
 // #1
 routes.get('/api/products', async (req, res) => {
     try {

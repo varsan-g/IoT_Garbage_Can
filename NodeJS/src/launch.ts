@@ -2,7 +2,6 @@
 // import {routes} from './0_routes/routes'
 
 import {routes} from './0_routes/routes.js'
-import { FileDump } from './2_sessions/FileDump.js';
 const port = 3000;
 
 const server = routes.listen(port, () =>{
@@ -15,12 +14,6 @@ const data = {
     age: 30,
     job: 'Software Developer'
 };
-
-let path:string ="./data/demo.txt";
-
-const fd:FileDump  = new FileDump();
-
-fd.dumpDataToFile(path,data);
 
 
 

@@ -14,8 +14,6 @@ routes.use(bodyParser.urlencoded({ extended: false }));
 routes.use(bodyParser.json())
 
 
-import { LoginEndpoint } from '../1_endpoints/LoginEndpoint.js';
-
 
 
 
@@ -23,10 +21,6 @@ import { LoginEndpoint } from '../1_endpoints/LoginEndpoint.js';
 
 // DB.connect(); // SENERE
 
-
-routes.post('/api/logon',  (req,res) => {
-   return LoginEndpoint.evaluate(req,res);
-});
 
 
 
