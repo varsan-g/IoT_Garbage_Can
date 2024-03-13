@@ -21,12 +21,12 @@ try:
     GPIO.setup(R_DIODE_PIN, GPIO.OUT)
     GPIO.setup(G_DIODE_PIN, GPIO.OUT)
     GPIO.setup(SWITCH_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(SWITCH_PIN, GPIO.FALLING, callback=my_callback) 
+    GPIO.add_event_detect(SWITCH_PIN, GPIO.FALLING) 
     hx = HX711(dout_pin=DT_PIN, pd_sck_pin=SCK_PIN)
     print("Please don't place anything on the weight...")
     hx.zero() #reset the hx711
     initial_reading = hx.get_raw_data_mean() #get value without weight
-    ws = create_connection ("ws://10.176.69.101:8080")
+    ws = create_connection ("ws://10.176.69.102:8080")
     ws.send("connected")
     input("Put a known weight on the weight and press enter: ")
     cali_reading =hx.get_data_mean()
@@ -38,14 +38,14 @@ try:
        print (calculated_weight)
        while calculated_weight >= weight_reset_threshold:
           if calculated_weight >= weight_reset_threshold:
-            last_weight_above_threshold = calculated_weight
-          elif last_weight is not None and calculated_weight < 50:
+            last_weight = calculated_weight
+          elif last_weight and calculated_weight < 50:
             # Weight has been emptied, send the last weight above 500
             GPIO.output(R_DIODE_PIN, GPIO.HIGH)
             GPIO.output(G_DIODE_PIN, GPIO.LOW)
-            print("Last weight before emptying:", last_weight_above_threshold)
-            ws.send(str(last_weight_above_threshold))
-            last_weight_above_threshold = None  # Reset the last weight above threshold
+            print("Last weight before emptying:", last_weight)
+            ws.send(str(last_weight))
+            last_weight = None  # Reset the last weight above threshold
 finally:
     GPIO.cleanup()
     #ws.close()
